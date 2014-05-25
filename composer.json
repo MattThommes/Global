@@ -13,7 +13,7 @@
     },
 		"autoload": {
 			"psr-0": {
-				"MattThommes\\Backend\\Mysql": "src/"
+				"MattThommes": "src/"
 			}
 		},
     "homepage": "http://github.com/MattThommes/Global",
