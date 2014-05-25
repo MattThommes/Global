@@ -1,5 +1,7 @@
 <?php
 
+namespace MattThommes\Backend;
+
 class Mysql
 {
     var $host;
