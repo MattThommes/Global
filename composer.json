@@ -16,7 +16,6 @@
 				"MattThommes\\Backend\\": "src/"
 			}
 		},
-    "target-dir": "src/MattThommes",
     "homepage": "http://github.com/MattThommes/Global",
     "minimum-stability": "dev"
 }
