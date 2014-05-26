@@ -1,5 +1,5 @@
 { 
-    "name": "MattThommes/Global",
+    "name": "mattthommes/global",
     "description": "Global scripts and code (common stuff) used for other projects.",
 		"authors": [{
 				"name": "Matt Thommes",
@@ -8,6 +8,7 @@
 				"role": "Developer"
 			}
 		],
+		"license": "MIT",
     "require": {
     	"php": ">=5.3.0"
     },
