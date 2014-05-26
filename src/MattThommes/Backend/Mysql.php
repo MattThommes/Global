@@ -11,7 +11,7 @@ class Mysql
     var $dbConn;
     var $connectError;
 
-    function Mysql( $host, $dbUser, $dbPass, $dbName )
+    function __construct( $host, $dbUser, $dbPass, $dbName )
     {
         $this -> host = $host;
         $this -> dbUser = $dbUser;
@@ -76,7 +76,7 @@ class MysqlResult
     var $mysql;
     var $query;
 
-    function MysqlResult( &$mysql, $query )
+    function __construct( &$mysql, $query )
     {
         $this -> mysql = &$mysql;
         $this -> query = $query;
