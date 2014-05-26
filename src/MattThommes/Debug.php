@@ -1,6 +1,8 @@
 <?php
 
-	require_once("classes/Mysql.php");
+namespace MattThommes;
+
+class Debug {
 
 	function dbg($var, $continue = 0, $element = "pre") {
 	  echo "<" . $element . ">";
@@ -11,5 +13,7 @@
 	  echo "</" . $element . ">";
 		if (!$continue) exit();
 	}
+
+}
 
 ?>
