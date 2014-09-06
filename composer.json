@@ -18,5 +18,5 @@
 			]
 		},
     "homepage": "http://github.com/MattThommes/Global",
-    "minimum-stability": "dev"
+    "minimum-stability": "1.0"
 }
