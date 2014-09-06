@@ -8,14 +8,14 @@ Class Http {
 	
 	}
 
-	function curl($url, $params, $verb = "GET", $opts = array(), $headers = array()) {
+	function curl($url, $params = array(), $verb = "GET", $opts = array(), $headers = array()) {
 		$c = curl_init();
 		curl_setopt($c, CURLOPT_URL, $url);
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 
 		// "opt_userpwd" should be "username:password"
-		if (isset($options["opt_userpwd"]) && $options["opt_userpwd"]) {
-			curl_setopt($c, CURLOPT_USERPWD, $options["opt_userpwd"]);
+		if (isset($opts["opt_userpwd"]) && $opts["opt_userpwd"]) {
+			curl_setopt($c, CURLOPT_USERPWD, $opts["opt_userpwd"]);
 		}
 
 		if ($verb == "PUT") {
@@ -32,14 +32,16 @@ Class Http {
 		}
 
 		$headers[] = "Expect:";
+		if (isset($opts["opt_httpheader"]) && $opts["opt_httpheader"]) {
+			foreach ($opts["opt_httpheader"] as $h) {
+				$headers[] = $h;
+			}
+		}
+
 		curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt($c, CURLOPT_FOLLOWLOCATION, 1);
-
-		if (isset($options["opt_httpheader"]) && $options["opt_httpheader"]) {
-			curl_setopt($c, CURLOPT_HTTPHEADER, $options["opt_httpheader"]);
-		}
 
 		$output = curl_exec($c);
 		$http_code = curl_getinfo($c, CURLINFO_HTTP_CODE);
