@@ -19,12 +19,12 @@ class Mysql {
 	}
 
 	function connectToDb() {
-		if ( !$this -> dbConn = @mysql_connect($this -> host, $this -> dbUser, $this -> dbPass) ) {
+		if ( !$this->dbConn = @mysql_connect($this->host, $this->dbUser, $this->dbPass) ) {
 			trigger_error("Could not connect to server:" . mysql_error());
-			$this -> connectError = true;
-		} elseif ( !@mysql_select_db($this -> dbName, $this ->dbConn) ) {
+			$this->connectError = true;
+		} elseif ( !@mysql_select_db($this->dbName, $this->dbConn) ) {
 			trigger_error("Could not select database.");
-			$this -> connectError = true;
+			$this->connectError = true;
 		}
 	}
 
@@ -48,7 +48,7 @@ class Mysql {
 	}
 
 	function close() {
-		mysql_close($this -> dbConn);
+		mysql_close($this->dbConn);
 	}
 }
 
