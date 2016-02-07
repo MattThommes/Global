@@ -14,6 +14,7 @@ class Flickr {
 	private $timestamp;
 	private $signature_method;
 	private $version;
+	private $signature;
 	public $request_url = "https://www.flickr.com/services/oauth/request_token";
 	public $authorize_url = "https://www.flickr.com/services/oauth/authorize";
 	public $access_token_url = "https://www.flickr.com/services/oauth/access_token";
@@ -28,6 +29,7 @@ class Flickr {
 		$this->signature_method = "HMAC-SHA1";
 		$this->version = "1.0";
 		$this->auth_callback = $auth_callback;
+		$this->signature = $this->generateSignature();
 		if (isset($_GET["oauth_token"]) && isset($_GET["oauth_verifier"])) {
 			// Coming back to this page after authorizing on Flickr.
 			$this->verifyRequest($_GET["oauth_token"], $_GET["oauth_verifier"]);
@@ -63,14 +65,13 @@ class Flickr {
 	 * Signing Requests, and Getting a Request Token. 
 	 */
 	private function authRequest() {
-		$signature = $this->generateSignature();
 		$url = "{$this->request_url}";
 		$url .= "?oauth_nonce={$this->nonce}";
 		$url .= "&oauth_timestamp={$this->timestamp}";
 		$url .= "&oauth_consumer_key={$this->auth_consumer_key}";
 		$url .= "&oauth_signature_method={$this->signature_method}";
 		$url .= "&oauth_version={$this->version}";
-		$url .= "&oauth_signature={$signature}";
+		$url .= "&oauth_signature={$this->signature}";
 		$url .= "&oauth_callback=" . rawurlencode($this->auth_callback);
 		$req = new Http;
 		$response = $req->curl($url);
@@ -96,9 +97,12 @@ class Flickr {
 			"oauth_signature_method" => $this->signature_method,
 			"oauth_version" => $this->version,
 			"oauth_token" => $oauth_token,
-			"oauth_signature" => "", //// <--- NEED TO GENERATE THIS AGAIN.
+			"oauth_signature" => $this->signature,
 		);
-		///// NEED CURL CALL HERE TO GET ACCESS TOKEN!
+		$url = $this->access_token_url . "?" . http_build_query($base);
+		$req = new Http;
+		$response = $req->curl($url);
+		// CHECK THE RESPONSE!!!
 	}
 
 }
