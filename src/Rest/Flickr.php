@@ -43,7 +43,7 @@ class Flickr {
 			$base_key_values[] = rawurlencode($k) . "=" . rawurlencode($base[$k]);
 		}
 		$base_str = implode("&", $base_key_values);
-		$base_str = sprintf("GET&%s&%s", rawurlencode($request_url), $base_str);
+		$base_str = sprintf("%s&%s&%s", rawurlencode("GET"), rawurlencode($request_url), rawurlencode($base_str));
 		$key = sprintf("%s&", $this->auth_consumer_secret);
 		$signature = base64_encode(hash_hmac("sha1", $base_str, $key, true));
 		$url = "{$request_url}";
