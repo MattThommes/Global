@@ -54,7 +54,12 @@ class Flickr {
 		$url .= "&oauth_version={$version}";
 		$url .= "&oauth_signature={$signature}";
 		$url .= "&oauth_callback=" . urlencode($this->auth_callback);
-		$this->authorize_url = $url;
+		$req = new Http;
+		$response = $req->curl($url);
+		$response_vars = explode("&", $response);
+		list(,$oauth_token) = explode("=", $response_vars[1]);
+		$authorize_url = "https://www.flickr.com/services/oauth/authorize?oauth_token={$oauth_token}";
+		$this->authorize_url = $authorize_url;
 		return true;
 	}
 
