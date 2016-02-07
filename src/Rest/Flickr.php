@@ -40,7 +40,7 @@ class Flickr {
 		sort($base_keys, SORT_STRING);
 		$base_key_values = array();
 		foreach ($base_keys as $k) {
-			$base_key_values[rawurlencode($k)] = rawurlencode($base[$k]);
+			$base_key_values[] = rawurlencode($k) . "=" . rawurlencode($base[$k]);
 		}
 		$base_str = implode("&", $base_key_values);
 		$base_str = sprintf("GET&%s&%s", rawurlencode($request_url), $base_str);
