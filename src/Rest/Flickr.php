@@ -29,18 +29,23 @@ class Flickr {
 		$signature_method = "HMAC-SHA1";
 		$version = "1.0";
 		$base = array(
-			"GET",
-			$request_url,
-			"oauth_nonce=" . $nonce,
-			"&oauth_timestamp=" . $timestamp,
-			"&oauth_consumer_key=" . $this->auth_consumer_key,
-			"&oauth_signature_method=" . $signature_method,
-			"&oauth_version=" . $version,
-			"&oauth_callback=" . $this->auth_callback,
+			"oauth_callback" => $this->auth_callback,
+			"oauth_consumer_key" => $this->auth_consumer_key,
+			"oauth_nonce" => $nonce,
+			"oauth_signature_method" => $signature_method,
+			"oauth_timestamp" => $timestamp,
+			"oauth_version" => $version,
 		);
-		$base = array_map("urlencode", $base);
-		$base_str = "{$base[0]}&{$base[1]}&{$base[2]}{$base[3]}{$base[4]}{$base[5]}{$base[6]}{$base[7]}";
-		$signature = hash_hmac("sha1", $base_str, $this->auth_consumer_secret);
+		$base_keys = array_keys($base);
+		sort($base_keys, SORT_STRING);
+		$base_key_values = array();
+		foreach ($base_keys as $k) {
+			$base_key_values[rawurlencode($k)] = rawurlencode($base[$k]);
+		}
+		$base_str = implode("&", $base_key_values);
+		$base_str = sprintf("GET&%s&%s", rawurlencode($request_url), $base_str);
+		$key = sprintf("%s&", $this->auth_consumer_secret);
+		$signature = base64_encode(hash_hmac("sha1", $base_str, $key, true));
 		$url = "{$request_url}";
 		$url .= "?oauth_nonce={$nonce}";
 		$url .= "&oauth_timestamp={$timestamp}";

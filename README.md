@@ -16,8 +16,8 @@ Using Composer, simply specify what classes you want to use. For example, below 
 	// Output any variable for debugging purposes.
 	$debug->dbg($myvar);
 	// Create a function for easier usage.
-	function dbg($out) {
-		return $GLOBALS["debug"]->dbg($out);
+	function dbg($out, $continue = 0) {
+		return $GLOBALS["debug"]->dbg($out, $continue);
 	}
 
 	// Set up object var for Mysql.
