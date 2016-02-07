@@ -18,12 +18,20 @@ class Flickr {
 		$this->auth_consumer_key = $consumer_key;
 		$this->auth_consumer_secret = $consumer_secret;
 		$this->auth_callback = $auth_callback;
-		$this->authRequest();
+		if (isset($_GET["oauth_token"]) && isset($_GET["oauth_verifier"])) {
+			// Coming back to this page after authorizing on Flickr.
+			$this->verifyRequest($_GET["oauth_token"], $_GET["oauth_verifier"]);
+		} else {
+			// Start a new OAuth request.
+			$this->authRequest();
+		}
 	}
 
+	/**
+	 * Signing Requests, and Getting a Request Token. 
+	 */
 	private function authRequest() {
 		$request_url = "https://www.flickr.com/services/oauth/request_token";
-		//$mt = microtime();
 		$nonce = mt_rand();
 		$timestamp = time();
 		$signature_method = "HMAC-SHA1";
@@ -61,6 +69,28 @@ class Flickr {
 		$authorize_url = "https://www.flickr.com/services/oauth/authorize?oauth_token={$oauth_token}";
 		$this->authorize_url = $authorize_url;
 		return true;
+	}
+
+	/**
+	 * Exchanging the Request Token for an Access Token.
+	 */
+	private function verifyRequest($oauth_token, $oauth_verifier) {
+		$access_token_url = "https://www.flickr.com/services/oauth/access_token";
+		$nonce = mt_rand();
+		$timestamp = time();
+		$signature_method = "HMAC-SHA1";
+		$version = "1.0";
+		$base = array(
+			"oauth_nonce" => $nonce,
+			"oauth_timestamp" => $timestamp,
+			"oauth_verifier" => $oauth_verifier,
+			"oauth_consumer_key" => $this->auth_consumer_key,
+			"oauth_signature_method" => $signature_method,
+			"oauth_version" => $version,
+			"oauth_token" => $oauth_token,
+			"oauth_signature" => "", //// <--- NEED TO GENERATE THIS AGAIN.
+		);
+		///// NEED CURL CALL HERE TO GET ACCESS TOKEN!
 	}
 
 }
