@@ -31,16 +31,15 @@ class Flickr {
 		$base = array(
 			"GET",
 			$request_url,
-			"oauth_callback=" . $this->auth_callback,
-			"&oauth_consumer_key=" . $this->auth_consumer_key,
-			"&oauth_nonce=" . $nonce,
-			"&oauth_signature_method=" . $signature_method,
+			"oauth_nonce=" . $nonce,
 			"&oauth_timestamp=" . $timestamp,
+			"&oauth_consumer_key=" . $this->auth_consumer_key,
+			"&oauth_signature_method=" . $signature_method,
 			"&oauth_version=" . $version,
+			"&oauth_callback=" . $this->auth_callback,
 		);
 		$base = array_map("urlencode", $base);
 		$base_str = "{$base[0]}&{$base[1]}&{$base[2]}{$base[3]}{$base[4]}{$base[5]}{$base[6]}{$base[7]}";
-//$this->d->dbg($base_str);
 		$signature = hash_hmac("sha1", $base_str, $this->auth_consumer_secret);
 		$url = "{$request_url}";
 		$url .= "?oauth_nonce={$nonce}";

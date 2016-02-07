@@ -11,15 +11,19 @@ Using Composer, simply specify what classes you want to use. For example, below 
 	use MattThommes\Debug;
 	use MattThommes\Backend\Mysql;
 
-	// set up object var for Debug.
+	// Set up object var for Debug.
 	$debug = new Debug;
-	// output any variable for debugging purposes:
+	// Output any variable for debugging purposes.
 	$debug->dbg($myvar);
+	// Create a function for easier usage.
+	function dbg($out) {
+		return $GLOBALS["debug"]->dbg($out);
+	}
 
-	// set up object var for Mysql.
+	// Set up object var for Mysql.
 	$db_conn = new Mysql($mysql_host, $mysql_user, $mysql_pass, $mysql_db);
-	// run a DB query:
+	// Run a DB query.
 	$qry = $db_conn->query("SELECT * FROM ...");
-	// get the query results:
+	// Get the query results.
 	$rows = $qry->fetch_array();
 	
