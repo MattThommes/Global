@@ -78,7 +78,7 @@ class Flickr {
 		$req = new Http;
 		$res = $req->curl($url);
 		$res_vars = explode("&", $res);
-		list(,$oauth_token) = explode("=", $response_vars[1]);
+		list(,$oauth_token) = explode("=", $res_vars[1]);
 		$url_params = array(
 			"oauth_token" => $oauth_token,
 			"perms" => "read",
