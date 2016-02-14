@@ -21,6 +21,9 @@ class Flickr {
 	public $auth_callback;
 
 	function __construct($consumer_key, $consumer_secret, $auth_callback) {
+		if (!session_id()) {
+			session_start();
+		}
 		$this->d = new Debug;
 		$this->auth_consumer_key = $consumer_key;
 		$this->auth_consumer_secret = $consumer_secret;
@@ -29,13 +32,12 @@ class Flickr {
 		$this->signature_method = "HMAC-SHA1";
 		$this->version = "1.0";
 		$this->auth_callback = $auth_callback;
+		$this->signature = $_SESSION["signature"] = $this->generateSignature($this->request_url);
 		if (isset($_GET["oauth_token"]) && isset($_GET["oauth_verifier"])) {
 			// Coming back to this page after authorizing on Flickr.
-			$this->signature = $this->generateSignature($this->access_token_url);
 			$this->verifyRequest($_GET["oauth_token"], $_GET["oauth_verifier"]);
 		} else {
 			// Start a new OAuth request.
-			$this->signature = $this->generateSignature($this->request_url);
 			$this->authRequest();
 		}
 	}
@@ -109,11 +111,13 @@ class Flickr {
 			"oauth_signature_method" => $this->signature_method,
 			"oauth_version" => $this->version,
 			"oauth_token" => $oauth_token,
-			"oauth_signature" => $this->signature,
+			"oauth_signature" => $_SESSION["signature"],
 		);
 		$url = Http::buildQuery($this->access_token_url, $url_params);
+		dbg($url,1);
 		$req = new Http;
 		$res = $req->curl($url);
+		dbg($res);
 		// CHECK THE RESPONSE!!!
 	}
 
