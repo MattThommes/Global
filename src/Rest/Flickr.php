@@ -74,10 +74,7 @@ class Flickr {
 			"oauth_signature" => $this->signature,
 			"oauth_callback" => rawurlencode($this->auth_callback),
 		);
-		foreach ($url_params as $k => $v) {
-			$url_params[$k] = sprintf("%s=%s", $k, $v);
-		}
-		$url = sprintf("%s?%s", $this->request_url, implode("&", $url_params));
+		$url = Http::buildQuery($this->request_url, $url_params);
 		$req = new Http;
 		$response = $req->curl($url);
 		$response_vars = explode("&", $response);
@@ -86,10 +83,7 @@ class Flickr {
 			"oauth_token" => $oauth_token,
 			"perms" => "read",
 		);
-		foreach ($url_params as $k => $v) {
-			$url_params[$k] = sprintf("%s=%s", $k, $v);
-		}
-		$this->authorize_url = sprintf("%s?%s", $this->authorize_url, implode("&", $url_params));
+		$this->authorize_url = Http::buildQuery($this->authorize_url, $url_params);
 		return true;
 	}
 
@@ -110,10 +104,7 @@ class Flickr {
 			"oauth_token" => $oauth_token,
 			"oauth_signature" => $this->signature,
 		);
-		foreach ($url_params as $k => $v) {
-			$url_params[$k] = sprintf("%s=%s", $k, $v);
-		}
-		$url = sprintf("%s?%s", $this->access_token_url, implode("&", $url_params));
+		$url = Http::buildQuery($this->access_token_url, $url_params);
 		$req = new Http;
 		$response = $req->curl($url);
 		// CHECK THE RESPONSE!!!

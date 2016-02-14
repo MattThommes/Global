@@ -8,7 +8,7 @@ Class Http {
 	
 	}
 
-	function curl($url, $params = array(), $verb = "GET", $opts = array(), $headers = array()) {
+	public function curl($url, $params = array(), $verb = "GET", $opts = array(), $headers = array()) {
 		$c = curl_init();
 		curl_setopt($c, CURLOPT_URL, $url);
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
@@ -48,6 +48,22 @@ Class Http {
 		curl_close($c);
 
 		return $output;
+	}
+
+	/**
+	 * Prepare an array to be used in a URL as query parameters.
+	 * Similar to http_build_query() but without automatically URL-encoding the values.
+	 *
+	 * @param  string base_url   The base URL (starting with http://) up until the question mark.
+	 * @param  array  url_params The individual query params as an associative array.
+	 * @return string            The entire URL with all params included.
+	 */
+	public function buildQuery($base_url, $url_params) {
+		foreach ($url_params as $k => $v) {
+			$url_params[$k] = sprintf("%s=%s", $k, $v);
+		}
+		$url = sprintf("%s?%s", $base_url, implode("&", $url_params));
+		return $url;
 	}
 
 }
