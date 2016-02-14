@@ -65,20 +65,28 @@ class Flickr {
 	 * Signing Requests, and Getting a Request Token. 
 	 */
 	private function authRequest() {
-		$url = "{$this->request_url}";
-		$url .= "?oauth_nonce={$this->nonce}";
-		$url .= "&oauth_timestamp={$this->timestamp}";
-		$url .= "&oauth_consumer_key={$this->auth_consumer_key}";
-		$url .= "&oauth_signature_method={$this->signature_method}";
-		$url .= "&oauth_version={$this->version}";
-		$url .= "&oauth_signature={$this->signature}";
-		$url .= "&oauth_callback=" . rawurlencode($this->auth_callback);
+		$url_params = array(
+			"oauth_nonce" => $this->nonce,
+			"oauth_timestamp" => $this->timestamp,
+			"oauth_consumer_key" => $this->auth_consumer_key,
+			"oauth_signature_method" => $this->signature_method,
+			"oauth_version" => $this->version,
+			"oauth_signature" => $this->signature,
+			"oauth_callback" => rawurlencode($this->auth_callback),
+		);
+		foreach ($url_params as $k => $v) {
+			$url_params[$k] = sprintf("%s=%s", $k, $v);
+		}
+		$url = sprintf("%s?%s", $this->request_url, implode("&", $url_params));
 		$req = new Http;
 		$response = $req->curl($url);
 		$response_vars = explode("&", $response);
 		list(,$oauth_token) = explode("=", $response_vars[1]);
-		$authorize_url = "{$this->authorize_url}?oauth_token={$oauth_token}";
-		$this->authorize_url = $authorize_url;
+		$url_params = array(
+			"oauth_token" => $oauth_token,
+		);
+		$url_params = http_build_query($url_params);
+		$this->authorize_url = sprintf("%s?%s", $this->authorize_url, $url_params);
 		return true;
 	}
 
