@@ -97,7 +97,7 @@ class Flickr {
 	 * @param string oauth_verifier The verifier returned from Flickr after authorizing the app.
 	 */
 	private function verifyRequest($oauth_token, $oauth_verifier) {
-		$base = array(
+		$url_params = array(
 			"oauth_nonce" => $this->nonce,
 			"oauth_timestamp" => $this->timestamp,
 			"oauth_verifier" => $oauth_verifier,
@@ -107,7 +107,10 @@ class Flickr {
 			"oauth_token" => $oauth_token,
 			"oauth_signature" => $this->signature,
 		);
-		$url = $this->access_token_url . "?" . http_build_query($base);
+		foreach ($url_params as $k => $v) {
+			$url_params[$k] = sprintf("%s=%s", $k, $v);
+		}
+		$url = sprintf("%s?%s", $this->access_token_url, implode("&", $url_params));
 		$req = new Http;
 		$response = $req->curl($url);
 		// CHECK THE RESPONSE!!!
