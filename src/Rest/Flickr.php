@@ -29,17 +29,24 @@ class Flickr {
 		$this->signature_method = "HMAC-SHA1";
 		$this->version = "1.0";
 		$this->auth_callback = $auth_callback;
-		$this->signature = $this->generateSignature();
 		if (isset($_GET["oauth_token"]) && isset($_GET["oauth_verifier"])) {
 			// Coming back to this page after authorizing on Flickr.
+			$this->signature = $this->generateSignature($this->access_token_url);
 			$this->verifyRequest($_GET["oauth_token"], $_GET["oauth_verifier"]);
 		} else {
 			// Start a new OAuth request.
+			$this->signature = $this->generateSignature($this->request_url);
 			$this->authRequest();
 		}
 	}
 
-	private function generateSignature() {
+	/**
+	 * Generate the signature string.
+	 *
+	 * @param  string base_url The URL used for generating the signature.
+	 * @return string          The complete signature.
+	 */
+	private function generateSignature($base_url) {
 		$base = array(
 			"oauth_callback" => $this->auth_callback,
 			"oauth_consumer_key" => $this->auth_consumer_key,
@@ -55,7 +62,7 @@ class Flickr {
 			$base_key_values[] = rawurlencode($k) . "=" . rawurlencode($base[$k]);
 		}
 		$base_str = implode("&", $base_key_values);
-		$base_str = sprintf("%s&%s&%s", rawurlencode("GET"), rawurlencode($this->request_url), rawurlencode($base_str));
+		$base_str = sprintf("%s&%s&%s", rawurlencode("GET"), rawurlencode($base_url), rawurlencode($base_str));
 		$key = sprintf("%s&", $this->auth_consumer_secret);
 		$signature = base64_encode(hash_hmac("sha1", $base_str, $key, true));
 		return $signature;
