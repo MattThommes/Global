@@ -84,9 +84,12 @@ class Flickr {
 		list(,$oauth_token) = explode("=", $response_vars[1]);
 		$url_params = array(
 			"oauth_token" => $oauth_token,
+			"perms" => "read",
 		);
-		$url_params = http_build_query($url_params);
-		$this->authorize_url = sprintf("%s?%s", $this->authorize_url, $url_params);
+		foreach ($url_params as $k => $v) {
+			$url_params[$k] = sprintf("%s=%s", $k, $v);
+		}
+		$this->authorize_url = sprintf("%s?%s", $this->authorize_url, implode("&", $url_params));
 		return true;
 	}
 
