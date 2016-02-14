@@ -76,8 +76,8 @@ class Flickr {
 		);
 		$url = Http::buildQuery($this->request_url, $url_params);
 		$req = new Http;
-		$response = $req->curl($url);
-		$response_vars = explode("&", $response);
+		$res = $req->curl($url);
+		$res_vars = explode("&", $res);
 		list(,$oauth_token) = explode("=", $response_vars[1]);
 		$url_params = array(
 			"oauth_token" => $oauth_token,
@@ -106,7 +106,7 @@ class Flickr {
 		);
 		$url = Http::buildQuery($this->access_token_url, $url_params);
 		$req = new Http;
-		$response = $req->curl($url);
+		$res = $req->curl($url);
 		// CHECK THE RESPONSE!!!
 	}
 
