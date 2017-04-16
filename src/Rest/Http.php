@@ -58,7 +58,7 @@ Class Http {
 	 * @param  array  url_params The individual query params as an associative array.
 	 * @return string            The entire URL with all params included.
 	 */
-	public function buildQuery($base_url, $url_params) {
+	public static function buildQuery($base_url, $url_params) {
 		foreach ($url_params as $k => $v) {
 			$url_params[$k] = sprintf("%s=%s", $k, $v);
 		}
