@@ -31,4 +31,5 @@ Using Composer, simply specify what classes you want to use. For example, below 
 
 	// Get the query results.
 	$rows = $qry->fetch_array();
-	
+
+// Packagist test
