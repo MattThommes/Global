@@ -1,7 +1,6 @@
 { 
 	"name": "mattthommes/global",
 	"description": "Global scripts and code (common stuff) used for other projects.",
-	"version": "v1.2.0",
 	"authors": [{
 			"name": "Matt Thommes",
 			"email": "matt@thomm.es",
